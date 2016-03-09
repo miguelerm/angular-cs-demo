@@ -1,8 +1,6 @@
 ﻿angular.module('app.bodegas').config(configRoutes);
 
-function configRoutes($stateProvider, $urlRouterProvider) {
-
-    $urlRouterProvider.otherwise("/bodegas");
+function configRoutes($stateProvider) {
 
     $stateProvider
         .state('bodegas', {

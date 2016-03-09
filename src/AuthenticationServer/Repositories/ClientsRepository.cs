@@ -13,25 +13,25 @@ namespace AuthenticationServer.Repositories
                 {
                     Enabled = true,
                     ClientName = "AngularClient",
-                    ClientId = "angular-js",
+                    ClientId = "angular-client",
                     Flow = Flows.Implicit,
 
                     RedirectUris = new List<string>
                     {
-                        "http://localhost:15000/autenticar.html",
-                        "http://localhost:15000/reautenticar.html"
+                        "http://localhost:65339/#/validar-token?",
+                        "http://localhost:65339/actualizar-token.html"
                     },
 
                     PostLogoutRedirectUris = new List<string>
                     {
-                        "http://localhost:15000/index.html"
+                        "http://localhost:65339/#/sesion-cerrada"
                     },
 
                     AllowedCorsOrigins = new List<string>
                     {
-                        "http://localhost:15000"
+                        "http://localhost:65339"
                     },
-
+                    RequireConsent = false,
                     AllowAccessToAllScopes = true,
                     AccessTokenLifetime = 70
                 }

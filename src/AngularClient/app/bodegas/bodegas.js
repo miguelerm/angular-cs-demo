@@ -1,1 +1,1 @@
-﻿angular.module('app.bodegas', ['app.shared', 'ui.router']);
+﻿angular.module('app.bodegas', ['app.core']);
