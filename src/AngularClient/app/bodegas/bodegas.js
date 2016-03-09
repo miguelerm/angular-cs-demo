@@ -1,0 +1,1 @@
+﻿angular.module('app.bodegas', ['app.shared', 'ui.router']);
