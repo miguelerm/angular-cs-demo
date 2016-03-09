@@ -1,0 +1,26 @@
+{
+  "name": "angular-client",
+  "authors": [
+    "Miguel Román <miguelerm@gmail.com>"
+  ],
+  "description": "angular client",
+  "main": "index.html",
+  "moduleType": [],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "angular": "^1.5.0",
+    "oidc-token-manager": "^1.2.0",
+    "angular-ui-router": "^0.2.18",
+    "bootstrap": "^3.3.6",
+    "angular-bootstrap": "^1.2.4"
+  }
+}
