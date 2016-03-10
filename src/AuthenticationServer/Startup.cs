@@ -1,10 +1,10 @@
-﻿using System;
-using AuthenticationServer.Repositories;
+﻿using AuthenticationServer.Repositories;
 using IdentityServer3.Core.Configuration;
 using IdentityServer3.Core.Logging;
 using Owin;
-using System.Security.Cryptography.X509Certificates;
+using System;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
 
 namespace AuthenticationServer
 {

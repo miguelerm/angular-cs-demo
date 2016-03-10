@@ -1,8 +1,6 @@
 ﻿angular.module('app.core').config(configureAuth).run(redirectToLogin);
 
-function configureAuth($stateProvider, config) {
-
-    var manager = new OidcTokenManager(config.tokenManager);
+function configureAuth($stateProvider, tokenManager) {
 
     $stateProvider.decorator('parent', function (state, parent) {
         if (!state.abstract && (!state.data || !state.data.allowAnonymous)) {
@@ -18,7 +16,7 @@ function configureAuth($stateProvider, config) {
     function ObtenerUsuarioAutenticado($q) {
         var deferred = $q.defer();
 
-        var usr = manager.profile;
+        var usr = tokenManager.profile;
 
         if (usr && angular.isObject(usr)) {
             deferred.resolve(usr);

@@ -5,8 +5,9 @@
 </head>
 <body>
     <script src="/bower_components/oidc-token-manager/dist/oidc-token-manager.js"></script>
+    <script src="app/config.js"></script>
     <script>
-        var manager = new OidcTokenManager();
+        var manager = new OidcTokenManager(configuracion.tokenManager);
         manager.processTokenCallbackSilent();
     </script>
 </body>

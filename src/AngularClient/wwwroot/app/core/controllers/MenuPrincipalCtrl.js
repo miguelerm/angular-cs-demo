@@ -1,18 +1,16 @@
 ﻿angular.module('app.core').controller('MenuPrincipalCtrl', MenuPrincipalCtrl);
 
-function MenuPrincipalCtrl($rootScope, config) {
+function MenuPrincipalCtrl($rootScope, tokenManager) {
 
 
     var vm = this;
-    var manager = new OidcTokenManager(config.tokenManager);
-
     vm.opciones = [];
 
     init();
 
     function init() {
 
-        if (manager.expired) {
+        if (tokenManager.expired || !tokenManager.profile) {
             $rootScope.$on('USER_LOGGED_IN', cargarMenu)
         } else {
             cargarMenu();

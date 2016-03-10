@@ -6,6 +6,7 @@
 </head>
 <body>
     <iframe id="op"></iframe>
+    <script src="app/config.js"></script>
     <script>
         if (window.location.hash) {
             // 1 - getting parameters
@@ -27,7 +28,7 @@
                 console.error('No client_id passed to RP session frame');
             }
             else {
-                var idSrvOrigin = 'http://localhost:15001';
+                var idSrvOrigin = configuracion.tokenManager.authority;
 
                 var frame = document.getElementById('op');
                 frame.onload = function () {
@@ -45,7 +46,7 @@
                             }
 
                             if (e.data === 'changed') {
-                                window.parent.postMessage('changed', 'https://localhost:65339');
+                                window.parent.postMessage('changed', configuracion.clientUrl);
                             }
                         }
                     });
