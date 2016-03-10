@@ -104,10 +104,11 @@
     <Content Include="humans.txt" />
     <Content Include="index.html" />
     <Content Include="LICENSE.txt" />
+    <Content Include="actualizar-token.html" />
     <Content Include="robots.txt" />
     <Content Include="tile-wide.png" />
     <Content Include="tile.png" />
-    <Content Include="validar-token.html" />
+    <Content Include="verificar-sesion.html" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

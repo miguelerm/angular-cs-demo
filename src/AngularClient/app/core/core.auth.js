@@ -1,42 +1,43 @@
 ﻿angular.module('app.core').config(configureAuth).run(redirectToLogin);
 
-function configureAuth($stateProvider) {
+function configureAuth($stateProvider, config) {
 
-	$stateProvider.decorator('parent', function (state, parent) {
-		if (!state.abstract && (!state.data || !state.data.allowAnonymous)) {
-			state.resolve = state.resolve || {};
-			state.resolve.user = ObtenerUsuarioAutenticado;
-		}
+    var manager = new OidcTokenManager(config.tokenManager);
 
-		return parent(state);
-	});
+    $stateProvider.decorator('parent', function (state, parent) {
+        if (!state.abstract && (!state.data || !state.data.allowAnonymous)) {
+            state.resolve = state.resolve || {};
+            state.resolve.user = ObtenerUsuarioAutenticado;
+        }
 
-	ObtenerUsuarioAutenticado.$inject = ['$q'];
+        return parent(state);
+    });
 
-	function ObtenerUsuarioAutenticado($q) {
-		var deferred = $q.defer();
+    ObtenerUsuarioAutenticado.$inject = ['$q'];
 
-		var usr = JSON.parse(localStorage.getItem('user') || null);
+    function ObtenerUsuarioAutenticado($q) {
+        var deferred = $q.defer();
 
-		if (usr && angular.isObject(usr)) {
-			deferred.resolve(usr);
-		} else {
-			deferred.reject("AUTH_REQUIRED");
-		}
+        var usr = manager.profile;
 
-		return deferred.promise;
-	}
+        if (usr && angular.isObject(usr)) {
+            deferred.resolve(usr);
+        } else {
+            deferred.reject("AUTH_REQUIRED");
+        }
+
+        return deferred.promise;
+    }
 
 }
 
 function redirectToLogin($rootScope, $state) {
 
-	$rootScope.$on("$stateChangeError", onStateChangeError);
+    $rootScope.$on("$stateChangeError", onStateChangeError);
 
-	function onStateChangeError(event, toState, toParams, fromState, fromParams, error) {
-		if (error === "AUTH_REQUIRED") {
-			console.log('auth ', arguments);
-			$state.go('core.iniciar-sesion');
-		}
-	}
+    function onStateChangeError(event, toState, toParams, fromState, fromParams, error) {
+        if (error === "AUTH_REQUIRED") {
+            $state.go('core.iniciar-sesion');
+        }
+    }
 }
