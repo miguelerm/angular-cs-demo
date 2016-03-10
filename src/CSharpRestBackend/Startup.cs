@@ -37,48 +37,52 @@ namespace CSharpRestBackend
 
         private static void ConfigurarAutenticacion(IAppBuilder app) {
 
-            try
+            do
             {
-                Trace.TraceInformation("Intentando configurar el mecanismos de autenticación por tokens...");
-
-                // Wire token validation
-                app.UseIdentityServerBearerTokenAuthentication(new IdentityServerBearerTokenAuthenticationOptions
+                try
                 {
-                    Authority = "http://localhost:15001",
+                    Trace.TraceInformation("Intentando configurar el mecanismos de autenticación por tokens...");
 
-                    // For access to the introspection endpoint
-                    ClientId = "api",
-                    ClientSecret = "api-secret",
+                    // Wire token validation
+                    app.UseIdentityServerBearerTokenAuthentication(new IdentityServerBearerTokenAuthenticationOptions
+                    {
+                        Authority = "http://localhost:15001",
 
-                    RequiredScopes = new[] { "api" }
-                });
+                        // For access to the introspection endpoint
+                        ClientId = "api",
+                        ClientSecret = "api-secret",
 
-                Trace.TraceInformation("Mecanismo de autenticación configurado.");
-            }
-            catch (InvalidOperationException ex)
-            {
-                var innerException = ex.InnerException as IOException;
-                if (innerException == null)
-                {
-                    throw;
+                        RequiredScopes = new[] { "api" }
+                    });
+
+                    Trace.TraceInformation("Mecanismo de autenticación configurado.");
+                    return;
                 }
-
-                var innerExceptions = innerException.InnerException as AggregateException;
-
-                if (innerExceptions == null)
+                catch (InvalidOperationException ex)
                 {
-                    throw;
-                }
-                
-                if (!innerExceptions.InnerExceptions.Any(x => x is HttpRequestException))
-                {
-                    throw;
+                    var innerException = ex.InnerException as IOException;
+                    if (innerException == null)
+                    {
+                        throw;
+                    }
+
+                    var innerExceptions = innerException.InnerException as AggregateException;
+
+                    if (innerExceptions == null)
+                    {
+                        throw;
+                    }
+
+                    if (!innerExceptions.InnerExceptions.Any(x => x is HttpRequestException))
+                    {
+                        throw;
+                    }
                 }
 
                 Trace.TraceError("No se pudo conectar con el AuthorityServer, intentando de nuevo en un segundo...");
                 Thread.Sleep(TimeSpan.FromSeconds(1));
-                ConfigurarAutenticacion(app);
-            }
+
+            } while (true);
            
         }
     }
