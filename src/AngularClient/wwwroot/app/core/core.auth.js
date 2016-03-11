@@ -1,4 +1,4 @@
-﻿angular.module('app.core').config(configureAuth).run(redirectToLogin);
+﻿angular.module('app.core').config(configureAuth).run(redirectToLogin).run(configureSessionChecker);
 
 function configureAuth($stateProvider, tokenManager) {
 
@@ -38,4 +38,55 @@ function redirectToLogin($rootScope, $state) {
             $state.go('core.iniciar-sesion');
         }
     }
+
 }
+
+function configureSessionChecker($rootScope, tokenManager, config) {
+    if (tokenManager.expired || !tokenManager.profile) {
+
+        $rootScope.$on('USER_LOGGED_IN', checkSessionState.bind(null, tokenManager, config, 'user logged in'));
+    } else {
+        checkSessionState(tokenManager, config)
+    }
+}
+
+function checkSessionState(tokenManager, config) {
+
+    console.log('checkSessionState ', arguments);
+
+    var handled = false;
+
+    tokenManager.oidcClient.loadMetadataAsync().then(function (meta) {
+        var element = document.getElementById('rp');
+        if (meta.check_session_iframe && tokenManager.session_state) {
+           
+            element.src = '/verificar-sesion.html#' +
+                'session_state=' + tokenManager.session_state +
+                '&check_session_iframe=' + meta.check_session_iframe +
+                '&client_id=' + config.tokenManager.client_id;
+        }
+        else {
+            element.src = 'about:blank';
+        }
+    }).catch(function () {
+        console.error('catch ', arguments);
+    });
+
+    window.onmessage = function (e) {
+        if (e.origin === config.clientUrl && !handled) {
+            if (e.data === 'changed' || (e.data && angular.isString(e.data) && e.data.indexOf('#error=login_required') == 0)) {
+                handled = true;
+                tokenManager.removeToken();
+                tokenManager.renewTokenSilentAsync().then(function () {
+                    // Session state changed but we managed to silently get a new identity token, everything's fine
+                    console.log('renewTokenSilentAsync success');
+                }, function () {
+                    console.log('renewTokenSilentAsync fail');
+                    // Here we couldn't get a new identity token, we have to ask the user to log in again
+                    window.location.reload();
+                });
+            }
+        }
+    }
+}
+

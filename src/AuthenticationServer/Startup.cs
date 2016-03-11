@@ -1,6 +1,9 @@
 ﻿using AuthenticationServer.Repositories;
 using IdentityServer3.Core.Configuration;
 using IdentityServer3.Core.Logging;
+using Microsoft.Owin;
+using Microsoft.Owin.FileSystems;
+using Microsoft.Owin.StaticFiles;
 using Owin;
 using System;
 using System.IO;
@@ -28,6 +31,12 @@ namespace AuthenticationServer
                     .UseInMemoryUsers(users)
                     .UseInMemoryClients(clients)
                     .UseInMemoryScopes(scopes)
+            });
+
+            app.UseFileServer(new FileServerOptions()
+            {
+                RequestPath = PathString.Empty,
+                FileSystem = new PhysicalFileSystem(@".\wwwroot"),
             });
         }
 
