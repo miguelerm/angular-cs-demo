@@ -35,6 +35,8 @@ function redirectToLogin($rootScope, $state) {
 
     function onStateChangeError(event, toState, toParams, fromState, fromParams, error) {
         if (error === "AUTH_REQUIRED") {
+            var returnState = JSON.stringify({ name: toState.name, params: toParams });
+            sessionStorage.setItem('return-state', returnState);
             $state.go('core.iniciar-sesion');
         }
     }
