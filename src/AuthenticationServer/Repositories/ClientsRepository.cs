@@ -18,18 +18,18 @@ namespace AuthenticationServer.Repositories
 
                     RedirectUris = new List<string>
                     {
-                        "http://localhost:15003/#/validar-token?",
-                        "http://localhost:15003/actualizar-token.html"
+                        "http://localhost:15001/#/validar-token?",
+                        "http://localhost:15001/actualizar-token.html"
                     },
 
                     PostLogoutRedirectUris = new List<string>
                     {
-                        "http://localhost:15003/#/sesion-cerrada"
+                        "http://localhost:15001/#/sesion-cerrada"
                     },
 
                     AllowedCorsOrigins = new List<string>
                     {
-                        "http://localhost:15003"
+                        "http://localhost:15001"
                     },
                     RequireConsent = false,
                     AllowAccessToAllScopes = true,
