@@ -23,17 +23,23 @@ namespace CSharpRestBackend
             ConfigurarAutenticacion(app, certificado, issuerName);
 
             // Wire Web API
-            var httpConfiguration = new HttpConfiguration();
+            var config = new HttpConfiguration();
 
-            httpConfiguration.MapHttpAttributeRoutes();
-            httpConfiguration.Filters.Add(new AuthorizeAttribute());
+            config.MapHttpAttributeRoutes();
+            config.Filters.Add(new AuthorizeAttribute());
 
-            var serializerSettings = httpConfiguration.Formatters.JsonFormatter.SerializerSettings;
-            serializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            serializerSettings.DateFormatHandling = Newtonsoft.Json.DateFormatHandling.IsoDateFormat;
-            serializerSettings.DateTimeZoneHandling = Newtonsoft.Json.DateTimeZoneHandling.Utc;
+            var serializer = config.Formatters.JsonFormatter.SerializerSettings;
+            serializer.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            serializer.DateFormatHandling = Newtonsoft.Json.DateFormatHandling.IsoDateFormat;
+            serializer.DateTimeZoneHandling = Newtonsoft.Json.DateTimeZoneHandling.Utc;
 
-            app.UseWebApi(httpConfiguration);
+            config.Routes.MapHttpRoute(
+                name: "default", 
+                routeTemplate: "{controller}/{id}", 
+                defaults: new { Id = RouteParameter.Optional }
+            );
+
+            app.UseWebApi(config);
         }
 
         private static void ConfigurarAutenticacion(IAppBuilder app, X509Certificate2 certificado, string issuerName)

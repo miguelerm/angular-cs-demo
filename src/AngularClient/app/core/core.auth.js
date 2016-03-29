@@ -1,6 +1,19 @@
-﻿angular.module('app.core').config(configureAuth).run(redirectToLogin).run(configureSessionChecker);
+﻿angular.module('app.core').factory('httpRequestInterceptor', httpRequestInterceptorFactory).config(configureAuth).run(redirectToLogin).run(configureSessionChecker);
 
-function configureAuth($stateProvider, tokenManager) {
+function httpRequestInterceptorFactory(tokenManager) {
+    return {
+        request: function ($config) {
+            if (tokenManager.access_token) {
+                $config.headers['Authorization'] = 'Bearer ' + tokenManager.access_token;
+            }
+            return $config;
+        }
+    };
+}
+
+function configureAuth($stateProvider, $httpProvider, tokenManager) {
+
+    $httpProvider.interceptors.push('httpRequestInterceptor');
 
     $stateProvider.decorator('parent', function (state, parent) {
         if (!state.abstract && (!state.data || !state.data.allowAnonymous)) {
@@ -45,7 +58,6 @@ function redirectToLogin($rootScope, $state) {
 
 function configureSessionChecker($rootScope, tokenManager, config) {
     if (tokenManager.expired || !tokenManager.profile) {
-
         $rootScope.$on('USER_LOGGED_IN', checkSessionState.bind(null, tokenManager, config, 'user logged in'));
     } else {
         checkSessionState(tokenManager, config)

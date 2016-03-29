@@ -15,7 +15,7 @@ namespace AuthenticationServer.Repositories
                 {
                     Username = "admin",
                     Password = "admin",
-                    Subject = "1",
+                    Subject = "101", // Este es el id único del usuario.
 
                     Claims = new[]
                     {

@@ -1,7 +1,6 @@
 ﻿angular.module('app.core').controller('MenuPrincipalCtrl', MenuPrincipalCtrl);
 
-function MenuPrincipalCtrl($rootScope, tokenManager) {
-
+function MenuPrincipalCtrl($rootScope, $http, $log, tokenManager) {
 
     var vm = this;
     vm.opciones = [];
@@ -11,32 +10,22 @@ function MenuPrincipalCtrl($rootScope, tokenManager) {
     function init() {
 
         if (tokenManager.expired || !tokenManager.profile) {
-            $rootScope.$on('USER_LOGGED_IN', cargarMenu)
+            $rootScope.$on('USER_LOGGED_IN', obtenerOpcionesDelMenu)
         } else {
-            cargarMenu();
+            obtenerOpcionesDelMenu();
         }
     }
 
-    function cargarMenu() {
-        vm.opciones = [
-            {
-                titulo: 'Bodegas',
-                url: '#/bodegas'
-            },
-            {
-                titulo: 'Reportes',
-                opciones: [
-                    {
-                        titulo: 'Top 10',
-                        url: '#/bodegas/reportes/top-10'
-                    },
-                    {
-                        titulo: 'Catalogo',
-                        url: '#/bodegas/reportes/catalogo'
-                    }
-                ]
-            }
-        ]
+    function obtenerOpcionesDelMenu() {
+        $http.get('/api/opcionesdemenu').then(cargarOpcionesDelMenu, mostrarError);
+    }
+
+    function mostrarError() {
+        $log.error("Ocurrió un error: ", arguments);
+    }
+
+    function cargarOpcionesDelMenu(response) {
+        vm.opciones = response.data;
     }
 
 }
