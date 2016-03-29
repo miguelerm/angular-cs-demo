@@ -10,9 +10,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AngularClient
+namespace SelfHostedApp
 {
-    public static class Config
+    public static class ClientConfiguration
     {
         public static void ConfigureClient(this IAppBuilder app, string root)
         {
@@ -35,7 +35,7 @@ namespace AngularClient
             }
 #endif
 
-            var wwwrootPath = Path.Combine(root, "wwwroot");
+            var wwwrootPath = root;
             if (Directory.Exists(wwwrootPath))
             {
                 app.UseFileServer(new FileServerOptions()

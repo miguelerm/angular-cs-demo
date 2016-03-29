@@ -8,11 +8,10 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using Owin;
-using AngularClient;
 using AuthenticationServer;
 using CSharpRestBackend;
 
-namespace Host
+namespace SelfHostedApp
 {
     class Program
     {
@@ -25,7 +24,7 @@ namespace Host
                 .MinimumLevel.Debug()
                 .CreateLogger();
 
-            certificado = LoadCertificate();
+            certificado = CargarCertificado();
 
             Log.Debug("Usando certificado: {@certificado}", new { certificado.FriendlyName, certificado.Issuer });
 
@@ -46,9 +45,11 @@ namespace Host
             app.Map("/api", api => api.ConfigureRestApi(certificado, "http://localhost:15001/identity"));
         }
 
-        static X509Certificate2 LoadCertificate()
+        static X509Certificate2 CargarCertificado()
         {
-            return new X509Certificate2(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Certificados\idsrv3test.pfx"), "idsrv3test");
+            var fileName = Path.Combine("../../../AngularClient/App_Data", @"Certificados\idsrv3test.pfx");
+            var password = "idsrv3test";
+            return new X509Certificate2(fileName, password);
         }
     }
 }

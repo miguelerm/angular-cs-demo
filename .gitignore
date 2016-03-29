@@ -211,4 +211,4 @@ GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
 **/*/bower_components/
-!src/Host/Certificados/*.pfx
+!**/*/Certificados/*.pfx
