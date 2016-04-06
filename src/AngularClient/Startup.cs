@@ -12,7 +12,7 @@ namespace AngularClient
         {
             var certificado = CargarCertificado();
             app.Map("/identity", identity => identity.ConfigureAuthenticationServer(certificado));
-            app.Map("/api", api => api.ConfigureRestApi(certificado, "http://localhost:15001/identity"));
+            app.Map("/api", api => api.ConfigureRestApi(certificado, "http://localhost:56673/identity"));
         }
 
         static X509Certificate2 CargarCertificado()

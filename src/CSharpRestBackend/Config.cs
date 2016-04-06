@@ -46,7 +46,7 @@ namespace CSharpRestBackend
         {
             app.UseIdentityServerBearerTokenAuthentication(new IdentityServerBearerTokenAuthenticationOptions
             {
-                Authority = "http://localhost:15001",
+                Authority = "http://localhost:56673/identity",
                 IssuerName = issuerName,
                 SigningCertificate = certificado,
                 // For access to the introspection endpoint
